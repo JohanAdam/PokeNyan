@@ -1,6 +1,8 @@
 package com.nyan.domain.network
 
 import retrofit2.HttpException
+import java.io.IOException
+import java.net.UnknownHostException
 
 /**
  * Handles error during api calls.
