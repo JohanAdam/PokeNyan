@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/PokeNyan.iml" filepath="$PROJECT_DIR$/.idea/modules/PokeNyan.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PokeNyan.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PokeNyan.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/PokeNyan.domain.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/PokeNyan.domain.iml" />
     </modules>
   </component>
 </project>
