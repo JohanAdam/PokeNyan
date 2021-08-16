@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 class PokemonListUseCase(private val remoteRepository: RemoteRepository) {
 
-    fun execute(): Flow<DataState<PokemonsEntity>> {
-        return remoteRepository.loadPokemons()
+    fun execute(offset: String, limit: String): Flow<DataState<PokemonsEntity>> {
+        return remoteRepository.loadPokemons(offset, limit)
     }
 
 }

@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface RemoteRepository {
 
-    fun loadPokemons(): Flow<DataState<PokemonsEntity>>
+    fun loadPokemons(offset: String, limit: String): Flow<DataState<PokemonsEntity>>
 
 }

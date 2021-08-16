@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="PokeNyan.app" target="11" />
+      <module name="PokeNyan.data" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
