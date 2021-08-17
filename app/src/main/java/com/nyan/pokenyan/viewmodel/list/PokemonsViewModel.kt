@@ -14,6 +14,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 sealed class PokemonsStateEvent {
     object GetPokemonsEvent: PokemonsStateEvent()
@@ -21,6 +22,8 @@ sealed class PokemonsStateEvent {
 
 class PokemonsViewModel(
     private val pokemonListUseCase: PokemonListUseCase): ViewModel() {
+
+    private var offset = "0"
 
     private val _isLoading: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val isLoading: LiveData<Event<Boolean>> get() = _isLoading
@@ -43,7 +46,7 @@ class PokemonsViewModel(
         viewModelScope.launch {
             when(event) {
                 is PokemonsStateEvent.GetPokemonsEvent -> {
-                    pokemonListUseCase.execute("0", "1110")
+                    pokemonListUseCase.execute(offset, "20")
                         .onEach { dataState ->
                             _isLoading.value = Event(false)
                             when(dataState) {
@@ -51,6 +54,8 @@ class PokemonsViewModel(
                                     _isLoading.value = Event(true)
                                 }
                                 is DataState.Success -> {
+                                    offset = dataState.data.results?.size.toString()
+                                    Timber.i("setStateEvent: Update offset to $offset")
                                     _listPokemon.value = dataState.data.results
                                 }
                                 is DataState.Failed -> {
