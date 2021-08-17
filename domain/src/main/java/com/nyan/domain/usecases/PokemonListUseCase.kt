@@ -1,5 +1,8 @@
 package com.nyan.domain.usecases
 
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.nyan.domain.entity.PokemonEntity
 import com.nyan.domain.entity.PokemonsEntity
 import com.nyan.domain.repository.RemoteRepository
 import com.nyan.domain.state.DataState
@@ -9,6 +12,10 @@ class PokemonListUseCase(private val remoteRepository: RemoteRepository) {
 
     fun execute(offset: String, limit: String): Flow<DataState<PokemonsEntity>> {
         return remoteRepository.loadPokemons(offset, limit)
+    }
+
+    fun executePaging(): Flow<PagingData<PokemonEntity>> {
+        return remoteRepository.loadPokemonsPaging()
     }
 
 }

@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.nyan.data.model.PokemonsResponseModel
 import com.nyan.data.model.ResultsItem
 import com.nyan.domain.entity.PokemonEntity
@@ -11,13 +14,13 @@ import com.nyan.domain.state.DataState
 import com.nyan.domain.usecases.PokemonListUseCase
 import com.nyan.foodie.event.Event
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 sealed class PokemonsStateEvent {
     object GetPokemonsEvent: PokemonsStateEvent()
+    object GetPokemonsEventTest: PokemonsStateEvent()
 }
 
 class PokemonsViewModel(
@@ -34,12 +37,15 @@ class PokemonsViewModel(
     private val _listPokemon: MutableLiveData<List<PokemonEntity>> = MutableLiveData()
     val listPokemon: LiveData<List<PokemonEntity>> = _listPokemon
 
+    private val _listPokemonTest: MutableLiveData<PagingData<PokemonEntity>> = MutableLiveData()
+    val listPokemonTest: LiveData<PagingData<PokemonEntity>> = _listPokemonTest
+
     init {
         getPokemons()
     }
 
     fun getPokemons() {
-        setStateEvent(PokemonsStateEvent.GetPokemonsEvent)
+        setStateEvent(PokemonsStateEvent.GetPokemonsEventTest)
     }
 
     private fun setStateEvent(event: PokemonsStateEvent) {
@@ -66,8 +72,22 @@ class PokemonsViewModel(
                         }
                         .launchIn(viewModelScope)
                 }
+                is PokemonsStateEvent.GetPokemonsEventTest -> {
+                    Timber.e("setStateEvent: TEST PAGING")
+//                    testPokemonPaging().distinctUntilChanged().collectLatest {
+//                        Timber.i("setStateEvent: Collect Latest!")
+//                        _listPokemonTest.value = it
+//                    }
+                }
             }
         }
+    }
+
+     fun testPokemonPaging(): Flow<PagingData<PokemonEntity>> {
+        Timber.i("testPokemonPaging: ")
+        return pokemonListUseCase
+            .executePaging()
+            .cachedIn(viewModelScope)
     }
 
     override fun onCleared() {
