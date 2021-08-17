@@ -5,6 +5,7 @@ import android.util.Log
 import com.nyan.data.di.NetworkModule.networkModule
 import com.nyan.data.di.RepositoryModule.repositoryModule
 import com.nyan.domain.di.DomainModule.domainModule
+import com.nyan.pokenyan.di.PresentationModule.presentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -24,7 +25,7 @@ class App: Application() {
         //Initialized Koin modules.
         startKoin {
             androidContext(this@App)
-            modules(networkModule, repositoryModule, domainModule)
+            modules(presentationModule, networkModule, repositoryModule, domainModule)
         }
 
     }

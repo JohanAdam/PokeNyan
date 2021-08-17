@@ -8,10 +8,10 @@ import retrofit2.http.Query
 interface NetworkService {
 
     companion object {
-        const val BASE_URL = "https://pokeapi.co/api/v2/"
+        const val BASE_URL = "https://pokeapi.co/"
     }
 
-    @GET("/pokemon")
+    @GET("/api/v2/pokemon")
     suspend fun getPokemons(
         @Query("offset") offset: String,
         @Query("limit") limit: String): PokemonsResponseModel

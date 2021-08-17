@@ -3,6 +3,7 @@ package com.nyan.data.model
 import com.google.gson.annotations.SerializedName
 import com.nyan.domain.entity.PokemonEntity
 import com.nyan.domain.entity.PokemonsEntity
+import java.util.*
 
 data class PokemonsResponseModel(
 
@@ -41,7 +42,7 @@ fun mapToDomain(response: PokemonsResponseModel) : PokemonsEntity {
 
 private fun mapToPokemonItemEntity(item: ResultsItem?) : PokemonEntity {
 	return PokemonEntity(
-		name = item?.name,
+		name = item?.name?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
 		url = item?.url
 	)
 }
