@@ -12,16 +12,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="4dp">
+        android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
             style="@style/CardView"
             android:id="@+id/root_view"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:elevation="6dp">
+            android:elevation="6dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="4dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

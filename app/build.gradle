@@ -51,6 +51,7 @@ dependencies {
     implementation "com.google.android.material:material:$android_material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipe_refresh_version"
 
     // Navigation
     implementation "android.arch.navigation:navigation-fragment-ktx:$navigation_version"

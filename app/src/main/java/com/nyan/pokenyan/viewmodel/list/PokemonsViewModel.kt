@@ -35,7 +35,7 @@ class PokemonsViewModel(
         getPokemons()
     }
 
-    private fun getPokemons() {
+    fun getPokemons() {
         setStateEvent(PokemonsStateEvent.GetPokemonsEvent)
     }
 
@@ -43,12 +43,12 @@ class PokemonsViewModel(
         viewModelScope.launch {
             when(event) {
                 is PokemonsStateEvent.GetPokemonsEvent -> {
-                    pokemonListUseCase.execute("0", "20")
+                    pokemonListUseCase.execute("0", "1110")
                         .onEach { dataState ->
                             _isLoading.value = Event(false)
                             when(dataState) {
                                 is DataState.Loading -> {
-                                    _isLoading.value = Event(false)
+                                    _isLoading.value = Event(true)
                                 }
                                 is DataState.Success -> {
                                     _listPokemon.value = dataState.data.results
@@ -56,6 +56,7 @@ class PokemonsViewModel(
                                 is DataState.Failed -> {
                                     _errorMsg.value = Event(dataState.error.errorMsg)
                                 }
+                                else -> _isLoading.value = Event(false)
                             }
                         }
                         .launchIn(viewModelScope)

@@ -45,6 +45,11 @@ class PokemonsFragment: Fragment() {
 
     private fun setupView() {
         binding.rv.layoutManager = LinearLayoutManager(context)
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.getPokemons()
+        }
+
     }
 
     private fun setupObserver() {
@@ -64,10 +69,15 @@ class PokemonsFragment: Fragment() {
     }
 
     private fun displayProgressBar(isLoading: Boolean) {
+        Timber.i("displayProgressBar: $isLoading")
         binding.progressBar.visibility = if(isLoading) View.VISIBLE else View.GONE
 
         if (isLoading) {
             pokemonAdapter.submitList(null)
+        } else {
+            if (binding.swipeRefreshLayout.isRefreshing) {
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
         }
     }
 
