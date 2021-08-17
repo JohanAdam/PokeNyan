@@ -9,6 +9,7 @@ data class PokemonsEntity(
 
 data class PokemonEntity(
 	val name: String? = null,
-	val url: String? = null
+	val url: String? = null,
+	val imgUrl: String? = null
 )
 

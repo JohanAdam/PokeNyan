@@ -42,6 +42,9 @@ buildscript {
         // ViewModel and LiveData
         version_lifecycle_extensions = "2.2.0"
 
+        //Glide.
+        glide_version = "4.11.0"
+
         junit_version = "4.13.2"
         junit_test_version = "1.1.3"
         expresso_core_version = "3.4.0"
