@@ -1,6 +1,7 @@
 package com.nyan.data.paging
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.nyan.data.model.mapToDomain
 import com.nyan.data.service.NetworkService
 import com.nyan.domain.entity.PokemonEntity
@@ -32,6 +33,10 @@ class PokemonPagingSource(private val networkService: NetworkService):
             e.printStackTrace()
             return LoadResult.Error(e)
         }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, PokemonEntity>): Int? {
+        TODO("Not yet implemented")
     }
 
 

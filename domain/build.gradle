@@ -11,5 +11,5 @@ java {
 }
 
 dependencies {
-    implementation 'androidx.paging:paging-common-ktx:3.0.0-alpha03'
+    implementation "androidx.paging:paging-common-ktx:$paging_version"
 }
