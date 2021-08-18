@@ -11,12 +11,11 @@ const val DEFAULT_PAGE_LIMIT = 1
 
 interface RemoteRepository {
 
-    fun loadPokemons(offset: String, limit: String): Flow<DataState<PokemonsEntity>>
+//    fun loadPokemons(offset: String, limit: String): Flow<DataState<PokemonsEntity>>
 
-    fun loadPokemonsPaging(pagingConfig: PagingConfig = getDefaultPageConfig()): Flow<PagingData<PokemonEntity>>
+    fun loadPokemons(pagingConfig: PagingConfig = getDefaultPageConfig()): Flow<PagingData<PokemonEntity>>
 
     private fun getDefaultPageConfig(): PagingConfig {
-        return PagingConfig(pageSize = DEFAULT_PAGE_LIMIT, enablePlaceholders = true,
-        maxSize = 100)
+        return PagingConfig(pageSize = DEFAULT_PAGE_LIMIT, enablePlaceholders = false)
     }
 }

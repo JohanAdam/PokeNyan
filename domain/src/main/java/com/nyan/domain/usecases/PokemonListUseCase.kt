@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.Flow
 
 class PokemonListUseCase(private val remoteRepository: RemoteRepository) {
 
-    fun execute(offset: String, limit: String): Flow<DataState<PokemonsEntity>> {
-        return remoteRepository.loadPokemons(offset, limit)
-    }
+//    fun execute(offset: String, limit: String): Flow<DataState<PokemonsEntity>> {
+//        return remoteRepository.loadPokemons(offset, limit)
+//    }
 
-    fun executePaging(): Flow<PagingData<PokemonEntity>> {
-        return remoteRepository.loadPokemonsPaging()
+    fun execute(): Flow<PagingData<PokemonEntity>> {
+        return remoteRepository.loadPokemons()
     }
 
 }

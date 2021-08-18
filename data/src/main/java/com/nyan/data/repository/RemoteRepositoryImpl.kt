@@ -19,30 +19,30 @@ import timber.log.Timber
 class RemoteRepositoryImpl(
     private val networkService: NetworkService) : RemoteRepository {
 
-    override fun loadPokemons(offset: String, limit: String): Flow<DataState<PokemonsEntity>> = flow {
-        //Return loading.
-        emit(DataState.Loading)
+//    override fun loadPokemons(offset: String, limit: String): Flow<DataState<PokemonsEntity>> = flow {
+//        //Return loading.
+//        emit(DataState.Loading)
+//
+//        try {
+//            //Result data from API.
+//            val pokemonsResponse = networkService.getPokemons(offset, limit)
+//
+//            //Mapping network model to domain model.
+//            val pokemons = mapToDomain(pokemonsResponse)
+//
+//            //Return result.
+//            emit(DataState.Success(pokemons))
+//
+//        } catch (e: HttpException) {
+//            //Return error.
+//            e.printStackTrace()
+//            emit(DataState.Failed(ErrorHandler(e)))
+//        }
+//    }
 
-        try {
-            //Result data from API.
-            val pokemonsResponse = networkService.getPokemons(offset, limit)
-
-            //Mapping network model to domain model.
-            val pokemons = mapToDomain(pokemonsResponse)
-
-            //Return result.
-            emit(DataState.Success(pokemons))
-
-        } catch (e: HttpException) {
-            //Return error.
-            e.printStackTrace()
-            emit(DataState.Failed(ErrorHandler(e)))
-        }
-    }
-
-    override fun loadPokemonsPaging(
+    override fun loadPokemons(
         pagingConfig: PagingConfig): Flow<PagingData<PokemonEntity>> {
-        Timber.i("loadPokemonsPaging: ")
+        Timber.i("loadPokemons: ")
         return Pager(
             config = pagingConfig,
             pagingSourceFactory = {
@@ -50,15 +50,5 @@ class RemoteRepositoryImpl(
             }
         ).flow
     }
-
-//    fun loadPokemonsFlow(pagingConfig: PagingConfig = getDefaultPageConfig()) :
-//            Flow<PagingData<ResultsItem>> {
-//        return Pager(
-//            config = pagingConfig,
-//            pagingSourceFactory = {
-//                PokemonPagingSource(networkService)
-//            }
-//        ).flow
-//    }
 
 }

@@ -20,13 +20,10 @@ import timber.log.Timber
 
 sealed class PokemonsStateEvent {
     object GetPokemonsEvent: PokemonsStateEvent()
-    object GetPokemonsEventTest: PokemonsStateEvent()
 }
 
 class PokemonsViewModel(
     private val pokemonListUseCase: PokemonListUseCase): ViewModel() {
-
-    private var offset = "0"
 
     private val _isLoading: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val isLoading: LiveData<Event<Boolean>> get() = _isLoading
@@ -34,60 +31,53 @@ class PokemonsViewModel(
     private val _errorMsg: MutableLiveData<Event<String>> = MutableLiveData()
     val errorMsg: LiveData<Event<String>> get() = _errorMsg
 
-    private val _listPokemon: MutableLiveData<List<PokemonEntity>> = MutableLiveData()
-    val listPokemon: LiveData<List<PokemonEntity>> = _listPokemon
-
-    private val _listPokemonTest: MutableLiveData<PagingData<PokemonEntity>> = MutableLiveData()
-    val listPokemonTest: LiveData<PagingData<PokemonEntity>> = _listPokemonTest
+    private val _listPokemon: MutableLiveData<PagingData<PokemonEntity>> = MutableLiveData()
+    val listPokemon: LiveData<PagingData<PokemonEntity>> = _listPokemon
 
     init {
         getPokemons()
     }
 
     fun getPokemons() {
-        setStateEvent(PokemonsStateEvent.GetPokemonsEventTest)
+        setStateEvent(PokemonsStateEvent.GetPokemonsEvent)
     }
 
     private fun setStateEvent(event: PokemonsStateEvent) {
         viewModelScope.launch {
             when(event) {
+//                is PokemonsStateEvent.GetPokemonsEvent -> {
+//                    pokemonListUseCase.execute(offset, "20")
+//                        .onEach { dataState ->
+//                            _isLoading.value = Event(false)
+//                            when(dataState) {
+//                                is DataState.Loading -> {
+//                                    _isLoading.value = Event(true)
+//                                }
+//                                is DataState.Success -> {
+//                                    offset = dataState.data.results?.size.toString()
+//                                    Timber.i("setStateEvent: Update offset to $offset")
+//                                    _listPokemon.value = dataState.data.results
+//                                }
+//                                is DataState.Failed -> {
+//                                    _errorMsg.value = Event(dataState.error.errorMsg)
+//                                }
+//                                else -> _isLoading.value = Event(false)
+//                            }
+//                        }
+//                        .launchIn(viewModelScope)
+//                }
                 is PokemonsStateEvent.GetPokemonsEvent -> {
-                    pokemonListUseCase.execute(offset, "20")
-                        .onEach { dataState ->
-                            _isLoading.value = Event(false)
-                            when(dataState) {
-                                is DataState.Loading -> {
-                                    _isLoading.value = Event(true)
-                                }
-                                is DataState.Success -> {
-                                    offset = dataState.data.results?.size.toString()
-                                    Timber.i("setStateEvent: Update offset to $offset")
-                                    _listPokemon.value = dataState.data.results
-                                }
-                                is DataState.Failed -> {
-                                    _errorMsg.value = Event(dataState.error.errorMsg)
-                                }
-                                else -> _isLoading.value = Event(false)
-                            }
+                    Timber.e("setStateEvent: Get Pokemon")
+                    pokemonListUseCase
+                        .execute()
+                        .cachedIn(viewModelScope)
+                        .distinctUntilChanged()
+                        .collectLatest {
+                            _listPokemon.value = it
                         }
-                        .launchIn(viewModelScope)
-                }
-                is PokemonsStateEvent.GetPokemonsEventTest -> {
-                    Timber.e("setStateEvent: TEST PAGING")
-//                    testPokemonPaging().distinctUntilChanged().collectLatest {
-//                        Timber.i("setStateEvent: Collect Latest!")
-//                        _listPokemonTest.value = it
-//                    }
                 }
             }
         }
-    }
-
-     fun testPokemonPaging(): Flow<PagingData<PokemonEntity>> {
-        Timber.i("testPokemonPaging: ")
-        return pokemonListUseCase
-            .executePaging()
-            .cachedIn(viewModelScope)
     }
 
     override fun onCleared() {

@@ -7,18 +7,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nyan.domain.entity.PokemonEntity
 import com.nyan.foodie.event.EventObserver
 import com.nyan.pokenyan.adapter.LoaderStateAdapter
-import com.nyan.pokenyan.adapter.PokemonAdapter
-import com.nyan.pokenyan.adapter.PokemonAdapterTest
+import com.nyan.pokenyan.adapter.PokemonsAdapter
 import com.nyan.pokenyan.databinding.FragmentPokemonsBinding
 import com.nyan.pokenyan.viewmodel.list.PokemonsViewModel
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -29,14 +26,10 @@ class PokemonsFragment: Fragment() {
 
     private val viewModel: PokemonsViewModel by viewModel()
 
-    private val pokemonAdapter by lazy {
-        PokemonAdapter { pokemon ->
-            Timber.i("Select pokemon %s", pokemon.name)
-        }
-    }
-
     private val pokemonAdapterTest by lazy {
-        PokemonAdapterTest()
+        PokemonsAdapter { selectedPokemon ->
+            Timber.i("Selected pokemon ${selectedPokemon.name}")
+        }
     }
 
     override fun onCreateView(
@@ -79,30 +72,14 @@ class PokemonsFragment: Fragment() {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
-        viewModel.listPokemon.observe(viewLifecycleOwner, {
-            displayData(it)
-        })
-
-//        viewModel.listPokemonTest.observe(viewLifecycleOwner, {
-//            Timber.i("setupObserver: Received!")
-//            binding.rv.adapter = pokemonAdapterTest
-//            lifecycleScope.launch {
-//                Timber.i("setupObserver: WEEE")
-//                pokemonAdapterTest.submitData(it)
-//            }
+//        viewModel.listPokemon.observe(viewLifecycleOwner, {
+//            displayData(it)
 //        })
 
-        fetchShit()
-    }
-
-    private fun fetchShit() {
-        Timber.i("fetchShit: ")
-        lifecycleScope.launch {
-            viewModel.testPokemonPaging().distinctUntilChanged().collectLatest {
-                Timber.i("fetchShit: collectLatest!")
-                pokemonAdapterTest.submitData(it)
-            }
-        }
+        viewModel.listPokemon.observe(viewLifecycleOwner , {
+            Timber.i("setupObserver: Received!")
+            displayData(it)
+        })
     }
 
     private fun displayProgressBar(isLoading: Boolean) {
@@ -110,8 +87,7 @@ class PokemonsFragment: Fragment() {
         binding.progressBar.visibility = if(isLoading) View.VISIBLE else View.GONE
 
         if (isLoading) {
-            pokemonAdapter.submitList(null)
-//            pokemonAdapterTest.submitData(null)
+            displayData(null)
         } else {
             if (binding.swipeRefreshLayout.isRefreshing) {
                 binding.swipeRefreshLayout.isRefreshing = false
@@ -119,9 +95,14 @@ class PokemonsFragment: Fragment() {
         }
     }
 
-    private fun displayData(data: List<PokemonEntity>?) {
-        binding.rv.adapter = pokemonAdapter
-        pokemonAdapter.submitList(data)
+    private fun displayData(data: PagingData<PokemonEntity>?) {
+        lifecycleScope.launch {
+            if (data != null) {
+                pokemonAdapterTest.submitData(data)
+            } else {
+                pokemonAdapterTest.submitData(PagingData.empty())
+            }
+        }
     }
 
     override fun onDestroyView() {
