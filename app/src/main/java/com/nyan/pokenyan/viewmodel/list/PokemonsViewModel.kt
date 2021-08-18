@@ -92,7 +92,6 @@ class PokemonsViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        //TODO Yep, I aware about this, and find a better solution for this.
         viewModelScope.cancel()
     }
 
