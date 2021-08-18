@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nyan.domain.entity.PokemonEntity
 import com.nyan.foodie.event.EventObserver
+import com.nyan.pokenyan.adapter.LoaderStateAdapter
 import com.nyan.pokenyan.adapter.PokemonAdapter
 import com.nyan.pokenyan.adapter.PokemonAdapterTest
 import com.nyan.pokenyan.databinding.FragmentPokemonsBinding
@@ -54,6 +55,13 @@ class PokemonsFragment: Fragment() {
 
     private fun setupView() {
         binding.rv.layoutManager = LinearLayoutManager(context)
+//        binding.rv.adapter = pokemonAdapterTest
+
+        //adapter setup.
+        val loaderStateAdapter = LoaderStateAdapter {
+            pokemonAdapterTest.retry()
+        }
+        binding.rv.adapter = pokemonAdapterTest.withLoadStateFooter(loaderStateAdapter)
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.getPokemons()
@@ -89,7 +97,6 @@ class PokemonsFragment: Fragment() {
 
     private fun fetchShit() {
         Timber.i("fetchShit: ")
-        binding.rv.adapter = pokemonAdapterTest
         lifecycleScope.launch {
             viewModel.testPokemonPaging().distinctUntilChanged().collectLatest {
                 Timber.i("fetchShit: collectLatest!")

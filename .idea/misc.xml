@@ -7,7 +7,9 @@
         <entry key="app/src/main/res/drawable/ic_broken_img.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24259259259259258" />
         <entry key="app/src/main/res/layout/fragment_pokemons.xml" value="0.23425925925925925" />
+        <entry key="app/src/main/res/layout/item_loader.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/list_item_pokemon.xml" value="0.16220136913679373" />
+        <entry key="app/src/main/res/xml/motion_loader.xml" value="0.23645833333333333" />
       </map>
     </option>
   </component>
