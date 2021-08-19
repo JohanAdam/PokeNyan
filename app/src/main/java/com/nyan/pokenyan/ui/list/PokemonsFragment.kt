@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nyan.domain.entity.PokemonEntity
@@ -19,14 +21,14 @@ import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class PokemonsFragment: Fragment() {
+class PokemonsFragment : Fragment() {
 
     private var _binding: FragmentPokemonsBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: PokemonsViewModel by viewModel()
 
-    private val pokemonAdapterTest by lazy {
+    private val pokemonAdapter by lazy {
         PokemonsAdapter { selectedPokemon ->
             Timber.i("Selected pokemon ${selectedPokemon.name}")
         }
@@ -36,7 +38,7 @@ class PokemonsFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPokemonsBinding.inflate(inflater)
         val view = binding.root
 
@@ -48,18 +50,27 @@ class PokemonsFragment: Fragment() {
 
     private fun setupView() {
         binding.rv.layoutManager = LinearLayoutManager(context)
-//        binding.rv.adapter = pokemonAdapterTest
-
         //adapter setup.
         val loaderStateAdapter = LoaderStateAdapter {
-            pokemonAdapterTest.retry()
+            pokemonAdapter.retry()
         }
-        binding.rv.adapter = pokemonAdapterTest.withLoadStateFooter(loaderStateAdapter)
+        binding.rv.adapter = pokemonAdapter.withLoadStateFooter(loaderStateAdapter)
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getPokemons()
+            lifecycleScope.launch {
+                pokemonAdapter.refresh()
+            }
         }
 
+        //Listen for pagination load.
+        pokemonAdapter.addLoadStateListener { loadState ->
+            //Show progressbar if the list is empty && when load state is loading.
+            if (loadState.refresh is LoadState.Loading && pokemonAdapter.snapshot().isEmpty()) {
+                displayProgressBar(true)
+            } else {
+                displayProgressBar(false)
+            }
+        }
     }
 
     private fun setupObserver() {
@@ -76,7 +87,7 @@ class PokemonsFragment: Fragment() {
 //            displayData(it)
 //        })
 
-        viewModel.listPokemon.observe(viewLifecycleOwner , {
+        viewModel.listPokemon.observe(viewLifecycleOwner, {
             Timber.i("setupObserver: Received!")
             displayData(it)
         })
@@ -84,24 +95,15 @@ class PokemonsFragment: Fragment() {
 
     private fun displayProgressBar(isLoading: Boolean) {
         Timber.i("displayProgressBar: $isLoading")
-        binding.progressBar.visibility = if(isLoading) View.VISIBLE else View.GONE
-
-        if (isLoading) {
-            displayData(null)
-        } else {
-            if (binding.swipeRefreshLayout.isRefreshing) {
-                binding.swipeRefreshLayout.isRefreshing = false
-            }
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        if (binding.swipeRefreshLayout.isRefreshing) {
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
-    private fun displayData(data: PagingData<PokemonEntity>?) {
+    private fun displayData(data: PagingData<PokemonEntity>) {
         lifecycleScope.launch {
-            if (data != null) {
-                pokemonAdapterTest.submitData(data)
-            } else {
-                pokemonAdapterTest.submitData(PagingData.empty())
-            }
+            pokemonAdapter.submitData(data)
         }
     }
 

@@ -17,7 +17,7 @@ class PokemonPagingSource(private val networkService: NetworkService):
         //For first case it will be null, then we can pass some default value, in our case it's 1.
         val page = params.key ?: DEFAULT_PAGE_LIMIT
         return try {
-            val response = networkService.getPokemons((page - 1).toString(), "20")
+            val response = networkService.getPokemons(page.toString(), "20")
 
             val pokemonEntity = mapToDomain(response)
 
@@ -36,7 +36,7 @@ class PokemonPagingSource(private val networkService: NetworkService):
     }
 
     override fun getRefreshKey(state: PagingState<Int, PokemonEntity>): Int? {
-        TODO("Not yet implemented")
+        return state.anchorPosition
     }
 
 
