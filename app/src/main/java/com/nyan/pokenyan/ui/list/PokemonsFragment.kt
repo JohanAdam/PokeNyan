@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nyan.domain.entity.PokemonEntity
 import com.nyan.foodie.event.EventObserver
@@ -49,7 +50,8 @@ class PokemonsFragment : Fragment() {
     }
 
     private fun setupView() {
-        binding.rv.layoutManager = LinearLayoutManager(context)
+//        binding.rv.layoutManager = LinearLayoutManager(context)
+        binding.rv.layoutManager = GridLayoutManager(requireContext(), 2)
         //adapter setup.
         val loaderStateAdapter = LoaderStateAdapter {
             pokemonAdapter.retry()
