@@ -51,12 +51,24 @@ class PokemonsFragment : Fragment() {
 
     private fun setupView() {
 //        binding.rv.layoutManager = LinearLayoutManager(context)
-        binding.rv.layoutManager = GridLayoutManager(requireContext(), 2)
+
         //adapter setup.
         val loaderStateAdapter = LoaderStateAdapter {
             pokemonAdapter.retry()
         }
         binding.rv.adapter = pokemonAdapter.withLoadStateFooter(loaderStateAdapter)
+
+        val gridLayoutManager = GridLayoutManager(requireContext(), 2)
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (position == pokemonAdapter.itemCount && loaderStateAdapter.itemCount > 0) {
+                    2
+                } else {
+                    1
+                }
+            }
+        }
+        binding.rv.layoutManager = gridLayoutManager
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
