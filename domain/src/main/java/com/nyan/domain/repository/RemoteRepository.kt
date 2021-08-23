@@ -2,6 +2,7 @@ package com.nyan.domain.repository
 
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.nyan.domain.entity.PokemonDetailEntity
 import com.nyan.domain.entity.PokemonEntity
 import com.nyan.domain.entity.PokemonsEntity
 import com.nyan.domain.state.DataState
@@ -18,4 +19,6 @@ interface RemoteRepository {
     private fun getDefaultPageConfig(): PagingConfig {
         return PagingConfig(pageSize = 25, enablePlaceholders = false)
     }
+
+    fun loadPokemonDetails(id: Int): Flow<PokemonDetailEntity>
 }

@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import com.nyan.data.paging.PokemonPagingSource
 import com.nyan.data.model.mapToDomain
 import com.nyan.data.service.NetworkService
+import com.nyan.domain.entity.PokemonDetailEntity
 import com.nyan.domain.entity.PokemonEntity
 import com.nyan.domain.entity.PokemonsEntity
 import com.nyan.domain.network.ErrorHandler
@@ -49,6 +50,10 @@ class RemoteRepositoryImpl(
                 PokemonPagingSource(networkService)
             }
         ).flow
+    }
+
+    override fun loadPokemonDetails(id: Int): Flow<PokemonDetailEntity> {
+        TODO("Not yet implemented")
     }
 
 }

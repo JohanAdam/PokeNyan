@@ -35,7 +35,7 @@ class PokemonDetailsFragment: Fragment() {
         //Received the data sent from list.
         val id = PokemonDetailsFragmentArgs.fromBundle(requireArguments()).pokemonId
         arguments = bundleOf(POKEMON_ID to id)
-        
+
         return view
     }
 
