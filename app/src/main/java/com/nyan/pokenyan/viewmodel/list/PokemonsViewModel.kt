@@ -6,11 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
-import com.nyan.data.model.PokemonsResponseModel
-import com.nyan.data.model.ResultsItem
 import com.nyan.domain.entity.PokemonEntity
-import com.nyan.domain.state.DataState
 import com.nyan.domain.usecases.PokemonListUseCase
 import com.nyan.foodie.event.Event
 import kotlinx.coroutines.cancel
@@ -19,11 +15,13 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 sealed class PokemonsStateEvent {
-    object GetPokemonsEvent: PokemonsStateEvent()
+    object GetPokemonsEvent : PokemonsStateEvent()
+    object OpenPokemonDetail : PokemonsStateEvent()
 }
 
 class PokemonsViewModel(
-    private val pokemonListUseCase: PokemonListUseCase): ViewModel() {
+    private val pokemonListUseCase: PokemonListUseCase
+) : ViewModel() {
 
     private val _isLoading: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val isLoading: LiveData<Event<Boolean>> get() = _isLoading
@@ -33,6 +31,11 @@ class PokemonsViewModel(
 
     private val _listPokemon: MutableLiveData<PagingData<PokemonEntity>> = MutableLiveData()
     val listPokemon: LiveData<PagingData<PokemonEntity>> = _listPokemon
+
+    private val _navigateToDetails: MutableLiveData<Event<PokemonEntity>> = MutableLiveData()
+    val navigateToDetails: LiveData<Event<PokemonEntity>> get() = _navigateToDetails
+
+    private var selectedPokemon: PokemonEntity? = null
 
     init {
         getPokemons()
@@ -44,7 +47,7 @@ class PokemonsViewModel(
 
     private fun setStateEvent(event: PokemonsStateEvent) {
         viewModelScope.launch {
-            when(event) {
+            when (event) {
 //                is PokemonsStateEvent.GetPokemonsEvent -> {
 //                    pokemonListUseCase.execute(offset, "20")
 //                        .onEach { dataState ->
@@ -76,8 +79,17 @@ class PokemonsViewModel(
                             _listPokemon.value = it
                         }
                 }
+                is PokemonsStateEvent.OpenPokemonDetail -> {
+                    Timber.i("setStateEvent: Open Pokemon Details")
+                    _navigateToDetails.postValue(Event(selectedPokemon!!))
+                }
             }
         }
+    }
+
+    fun openPokemonDetails(selectedPokemon: PokemonEntity) {
+        this.selectedPokemon = selectedPokemon
+        setStateEvent(PokemonsStateEvent.OpenPokemonDetail)
     }
 
     override fun onCleared() {

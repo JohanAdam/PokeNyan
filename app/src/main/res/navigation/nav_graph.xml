@@ -10,6 +10,18 @@
         android:name="com.nyan.pokenyan.ui.list.PokemonsFragment"
         android:label="fragment_pokemons"
         tools:layout="@layout/fragment_pokemons">
+        <action
+            android:id="@+id/action_showDetail"
+            app:destination="@id/pokemonDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pokemonDetailsFragment"
+        android:name="com.nyan.pokenyan.ui.detail.PokemonDetailsFragment"
+        android:label="PokemonDetailsFragment"
+        tools:layout="@layout/fragment_pokemon_details">
+        <argument
+            android:name="pokemonId"
+            app:argType="integer" />
     </fragment>
 
 </navigation>

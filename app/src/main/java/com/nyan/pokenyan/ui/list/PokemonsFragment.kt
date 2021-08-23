@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.nyan.domain.entity.PokemonEntity
 import com.nyan.foodie.event.EventObserver
 import com.nyan.pokenyan.adapter.LoaderStateAdapter
@@ -31,7 +30,7 @@ class PokemonsFragment : Fragment() {
 
     private val pokemonAdapter by lazy {
         PokemonsAdapter { selectedPokemon ->
-            Timber.i("Selected pokemon ${selectedPokemon.name}")
+            viewModel.openPokemonDetails(selectedPokemon)
         }
     }
 
@@ -102,8 +101,11 @@ class PokemonsFragment : Fragment() {
 //        })
 
         viewModel.listPokemon.observe(viewLifecycleOwner, {
-            Timber.i("setupObserver: Received!")
             displayData(it)
+        })
+
+        viewModel.navigateToDetails.observe(viewLifecycleOwner, EventObserver {
+            this.findNavController().navigate(PokemonsFragmentDirections.actionShowDetail(it.id))
         })
     }
 

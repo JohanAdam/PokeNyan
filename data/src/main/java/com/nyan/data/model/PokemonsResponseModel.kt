@@ -53,6 +53,7 @@ private fun mapToPokemonItemEntity(item: ResultsItem?) : PokemonEntity {
 	val imgUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
 
 	return PokemonEntity(
+		id = id,
 		name = item?.name?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
 		url = item?.url,
 		imgUrl = imgUrl
