@@ -16,7 +16,6 @@ fun bindImage(target: ImageView, imgUrl: String?) {
             .apply(RequestOptions()
                 .error(R.drawable.ic_broken_img))
             .transition(DrawableTransitionOptions.withCrossFade())
-            .centerCrop()
             .into(target)
     }
 }

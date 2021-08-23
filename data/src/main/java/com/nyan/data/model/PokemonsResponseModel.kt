@@ -19,7 +19,7 @@ data class PokemonsResponseModel(
 	val count: Int? = null,
 
 	@field:SerializedName("results")
-	val results: List<ResultsItem?>? = null
+	val results: List<ResultsItem>
 )
 
 data class ResultsItem(
@@ -36,7 +36,7 @@ fun mapToDomain(response: PokemonsResponseModel) : PokemonsEntity {
 		next = response.next,
 		previous = response.previous,
 		count = response.count,
-		results = response.results?.map {
+		results = response.results.map {
 			mapToPokemonItemEntity(it)
 		}
 	)
@@ -46,7 +46,7 @@ private fun mapToPokemonItemEntity(item: ResultsItem?) : PokemonEntity {
 
 	//Extract id from url last segment.
 	val uri = URI(item?.url)
-	val paths = uri.path.split("/")?.toTypedArray()
+	val paths = uri.path.split("/").toTypedArray()
 	val id = paths.get(paths.lastIndex - 1).toInt()
 //	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png
 //	Timber.i("mapToPokemonItemEntity: ${paths.get(paths.lastIndex - 1)}")
