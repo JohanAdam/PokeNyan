@@ -27,7 +27,7 @@ class LoaderStateAdapter(private val retry: () -> Unit) :
             //Get instance of the PokemonViewHolder.
             fun getInstance(parent: ViewGroup, retry: () -> Unit) : LoaderViewHolder {
                 val inflater = LayoutInflater.from(parent.context)
-                val view = inflater.inflate(R.layout.item_loader, parent, false)
+                val view = inflater.inflate(R.layout.list_item_loader, parent, false)
                 return LoaderViewHolder(view, retry)
             }
         }
