@@ -1,5 +1,6 @@
 package com.nyan.data.service
 
+import com.nyan.data.model.PokemonResponseModel
 import com.nyan.data.model.PokemonsResponseModel
 import com.nyan.domain.entity.PokemonsEntity
 import retrofit2.http.GET
@@ -20,6 +21,6 @@ interface NetworkService {
     //https://pokeapi.co/api/v2/pokemon/1
     @GET("/api/v2/pokemon/{id}")
     suspend fun getPokemonDetails(
-        @Path("id") id: String)
+        @Path("id") id: Int): PokemonResponseModel
 
 }

@@ -12,7 +12,7 @@ object PresentationModule {
             PokemonsViewModel(get())
         }
         viewModel {
-            (id: Int) -> PokemonDetailsViewModel(id)
+            (id: Int) -> PokemonDetailsViewModel(id, get())
         }
     }
 

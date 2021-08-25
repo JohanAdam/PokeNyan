@@ -7,6 +7,7 @@ import com.nyan.domain.entity.PokemonEntity
 import com.nyan.domain.entity.PokemonsEntity
 import com.nyan.domain.state.DataState
 import kotlinx.coroutines.flow.Flow
+import javax.xml.crypto.Data
 
 const val DEFAULT_PAGE_LIMIT = 0
 
@@ -20,5 +21,5 @@ interface RemoteRepository {
         return PagingConfig(pageSize = 25, enablePlaceholders = false)
     }
 
-    fun loadPokemonDetails(id: Int): Flow<PokemonDetailEntity>
+    fun loadPokemonDetails(id: Int): Flow<DataState<PokemonDetailEntity>>
 }
