@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/layout/item_loader.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/list_item_loader.xml" value="0.25286160249739853" />
         <entry key="app/src/main/res/layout/list_item_pokemon.xml" value="0.16220136913679373" />
+        <entry key="app/src/main/res/layout/list_item_types.xml" value="0.39758371428559125" />
         <entry key="app/src/main/res/xml/motion_loader.xml" value="0.23645833333333333" />
       </map>
     </option>

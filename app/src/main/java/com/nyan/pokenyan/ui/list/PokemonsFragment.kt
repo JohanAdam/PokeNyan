@@ -111,9 +111,13 @@ class PokemonsFragment : Fragment() {
 
     private fun displayProgressBar(isLoading: Boolean) {
         Timber.i("displayProgressBar: $isLoading")
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        if (binding.swipeRefreshLayout.isRefreshing) {
-            binding.swipeRefreshLayout.isRefreshing = false
+        lifecycleScope.launch {
+            if (isAdded) {
+                binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                if (binding.swipeRefreshLayout.isRefreshing) {
+                    binding.swipeRefreshLayout.isRefreshing = false
+                }
+            }
         }
     }
 

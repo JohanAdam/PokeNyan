@@ -48,7 +48,7 @@ class RemoteRepositoryImpl(
             //Return result.
             emit(DataState.Success(pokemon))
 
-        } catch (e: HttpException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             //Return error.
             emit(DataState.Failed(ErrorHandler(e)))
