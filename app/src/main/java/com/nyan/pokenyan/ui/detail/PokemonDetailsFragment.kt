@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,6 +19,7 @@ import com.nyan.pokenyan.adapter.SingleAdapter
 import com.nyan.pokenyan.adapter.TypeAdapter
 import com.nyan.pokenyan.binding.bindImage
 import com.nyan.pokenyan.databinding.FragmentPokemonDetailsBinding
+import com.nyan.pokenyan.ui.dialog.DialogLoading
 import com.nyan.pokenyan.viewmodel.detail.PokemonDetailsViewModel
 import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -81,11 +83,18 @@ class PokemonDetailsFragment : Fragment() {
         binding.rvMoves.adapter = movesAdapter
     }
 
+    private lateinit var dialogLoading: DialogFragment
     private fun setupObserver() {
 
         viewModel.isLoading.observe(viewLifecycleOwner, EventObserver {
             Timber.i("setupObserver: loading $it")
-            binding.layoutLoading.root.visibility = if (it) View.VISIBLE else View.GONE
+//            binding.layoutLoading.root.visibility = if (it) View.VISIBLE else View.GONE
+            if (it) {
+                dialogLoading = DialogLoading.newInstance()
+                dialogLoading.show(requireActivity().supportFragmentManager, DialogLoading::class.java.simpleName)
+            } else {
+                dialogLoading.dismiss()
+            }
         })
 
         viewModel.errorMsg.observe(viewLifecycleOwner, EventObserver {
