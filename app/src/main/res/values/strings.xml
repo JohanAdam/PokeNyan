@@ -2,4 +2,21 @@
     <string name="app_name">PokeNyan</string>
     <string name="action_retry">Retry</string>
     <string name="action_error">Error</string>
+    <string name="type">Type</string>
+    <string name="weakness">Weakness</string>
+
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="kg">%1$skg</string>
+    <string name="cm">%1$scm</string>
+
+    <string name="hp">HP - %1$s</string>
+    <string name="attack">ATK - %1$s</string>
+    <string name="defense">DEF - %1$s</string>
+    <string name="s_attack">S-ATK - %1$s</string>
+    <string name="s_defend">S-DEF - %1$s</string>
+    <string name="speed">SPD - %1$s</string>
+    <string name="abilities">Abilities</string>
+    <string name="bullet_single">• %1$s</string>
+    <string name="moves">Moves</string>
 </resources>
