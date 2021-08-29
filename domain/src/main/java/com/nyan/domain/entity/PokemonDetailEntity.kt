@@ -4,18 +4,13 @@ data class PokemonDetailEntity(
 	val types: List<TypesItem?>? = null,
 	val weight: Int? = null,
 	val sprites: Sprites? = null,
-	val abilities: List<AbilitiesItem?>? = null,
+	val abilities: List<String?>? = null,
 	val stats: List<StatsItem?>? = null,
-	val moves: List<MovesItem?>? = null,
+	val moves: List<String?>? = null,
 	val name: String? = null,
 	val id: Int? = null,
 	val height: Int? = null,
 	val order: Int? = null
-)
-
-data class Move(
-	val name: String? = null,
-	val url: String? = null
 )
 
 data class StatsItem(
@@ -25,11 +20,6 @@ data class StatsItem(
 )
 
 data class Stat(
-	val name: String? = null,
-	val url: String? = null
-)
-
-data class Ability(
 	val name: String? = null,
 	val url: String? = null
 )
@@ -50,12 +40,13 @@ data class Sprites(
 )
 
 data class MovesItem(
-	val move: Move? = null
-)
+	val name: String? = null,
+	val url: String? = null)
 
 data class AbilitiesItem(
+	val name: String? = null,
+	val url: String? = null,
 	val isHidden: Boolean? = null,
-	val ability: Ability? = null,
 	val slot: Int? = null
 )
 

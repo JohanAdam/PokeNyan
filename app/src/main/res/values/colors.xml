@@ -10,6 +10,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="white_50T">#7EFFFFFF</color>
 
+    <color name="transparent">#00FFFFFF</color>
+
     <color name="red_ef534e">#ef534e</color>
     <color name="red_ff867a">#ff867a</color>
     <color name="red_b61825">#b61825</color>

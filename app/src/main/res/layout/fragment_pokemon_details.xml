@@ -22,21 +22,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                style="@style/TextWhite18MediumTitle"
-                android:id="@+id/tv_names"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                tools:text="Names" />
-
             <ImageView
                 android:id="@+id/iv_sprite"
                 android:layout_width="160dp"
-                android:layout_height="wrap_content"
+                android:layout_height="160dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="14dp"
                 android:adjustViewBounds="true"

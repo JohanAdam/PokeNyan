@@ -63,7 +63,10 @@ class PokemonDetailsFragment : Fragment() {
 
         //Received the data sent from list.
         val id = PokemonDetailsFragmentArgs.fromBundle(requireArguments()).pokemonId
+        val name = PokemonDetailsFragmentArgs.fromBundle(requireArguments()).pokemonName
         arguments = bundleOf(POKEMON_ID to id)
+
+        Timber.i("onCreateView: Name is $name")
 
         setupView()
         setupObserver()
@@ -88,10 +91,12 @@ class PokemonDetailsFragment : Fragment() {
 
         viewModel.isLoading.observe(viewLifecycleOwner, EventObserver {
             Timber.i("setupObserver: loading $it")
-//            binding.layoutLoading.root.visibility = if (it) View.VISIBLE else View.GONE
             if (it) {
                 dialogLoading = DialogLoading.newInstance()
-                dialogLoading.show(requireActivity().supportFragmentManager, DialogLoading::class.java.simpleName)
+                dialogLoading.show(
+                    requireActivity().supportFragmentManager,
+                    DialogLoading::class.java.simpleName
+                )
             } else {
                 dialogLoading.dismiss()
             }
@@ -103,7 +108,6 @@ class PokemonDetailsFragment : Fragment() {
 
         viewModel.pokemonDetails.observe(viewLifecycleOwner, Observer {
             Timber.e("setupObserver: YAYY")
-            binding.tvNames.text = it.name
 
             bindImage(binding.ivSprite, it.sprites?.frontDefault)
 
@@ -112,7 +116,8 @@ class PokemonDetailsFragment : Fragment() {
             val weightInKg = it.weight?.times(0.1)
             val heightInCm = it.height?.times(10)
 
-            binding.tvWeight.text = getString(R.string.kg, String.format("%.1f", weightInKg))//Hectorgrams > Kg
+            binding.tvWeight.text =
+                getString(R.string.kg, String.format("%.1f", weightInKg))//Hectorgrams > Kg
             binding.tvHeight.text = getString(R.string.cm, heightInCm.toString()) //Decimeters > Cm
 
             //Stats.
@@ -148,32 +153,14 @@ class PokemonDetailsFragment : Fragment() {
                 binding.pbSpd.progress = spd
             }
 
-            it.abilities?.let { abilities ->
-                val abilitiesStr = ArrayList<String>()
-                for (item in abilities) {
-                    item?.ability?.name?.let { name ->
-                        val nameFormatted = name.replace("-", " ").replaceFirstChar(Char::uppercase)
-                        abilitiesStr.add(nameFormatted)
-                    }
-                }
-                abilitiesAdapter.submitList(abilitiesStr)
-            }
+            abilitiesAdapter.submitList(it.abilities)
 
-            it.moves?.let { moves ->
-                val movesStr = ArrayList<String>()
-                for (move in moves) {
-                    move?.move?.name?.let { name ->
-                        val nameFormatted = name.replace("-", " ").replaceFirstChar(Char::uppercase)
-                        movesStr.add(nameFormatted)
-                    }
-                }
-                movesAdapter.submitList(movesStr)
-            }
+            movesAdapter.submitList(it.moves)
         })
 
     }
 
-    private fun getStats(stat: String, statsList : List<StatsItem?>): Int {
+    private fun getStats(stat: String, statsList: List<StatsItem?>): Int {
         for (item in statsList) {
             if (item?.stat?.name.equals(stat)) {
                 return item?.baseStat!!

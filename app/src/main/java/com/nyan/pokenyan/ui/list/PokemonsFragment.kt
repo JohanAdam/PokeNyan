@@ -105,7 +105,7 @@ class PokemonsFragment : Fragment() {
         })
 
         viewModel.navigateToDetails.observe(viewLifecycleOwner, EventObserver {
-            this.findNavController().navigate(PokemonsFragmentDirections.actionShowDetail(it.id))
+            this.findNavController().navigate(PokemonsFragmentDirections.actionShowDetail(it.id, it.name!!))
         })
     }
 
