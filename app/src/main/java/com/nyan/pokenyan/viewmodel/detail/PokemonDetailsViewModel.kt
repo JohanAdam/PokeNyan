@@ -37,7 +37,7 @@ class PokemonDetailsViewModel(
         setStateEvent(DetailsStateEvent.GetPokemonDetailsEvent)
     }
 
-    private fun setStateEvent(event: DetailsStateEvent) {
+    fun setStateEvent(event: DetailsStateEvent) {
         viewModelScope.launch {
             when (event) {
                 is DetailsStateEvent.GetPokemonDetailsEvent -> {

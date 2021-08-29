@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.nyan.domain.entity.StatsItem
 import com.nyan.domain.entity.Type
 import com.nyan.domain.entity.TypesItem
@@ -20,6 +21,7 @@ import com.nyan.pokenyan.adapter.TypeAdapter
 import com.nyan.pokenyan.binding.bindImage
 import com.nyan.pokenyan.databinding.FragmentPokemonDetailsBinding
 import com.nyan.pokenyan.ui.dialog.DialogLoading
+import com.nyan.pokenyan.viewmodel.detail.DetailsStateEvent
 import com.nyan.pokenyan.viewmodel.detail.PokemonDetailsViewModel
 import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -104,6 +106,7 @@ class PokemonDetailsFragment : Fragment() {
 
         viewModel.errorMsg.observe(viewLifecycleOwner, EventObserver {
             Timber.e("setupObserver: error ${it}")
+            showErrorSnackbar(it)
         })
 
         viewModel.pokemonDetails.observe(viewLifecycleOwner, Observer {
@@ -157,6 +160,15 @@ class PokemonDetailsFragment : Fragment() {
 
             movesAdapter.submitList(it.moves)
         })
+
+    }
+
+    private fun showErrorSnackbar(errorMsg: String) {
+        Snackbar.make(binding.root, errorMsg, Snackbar.LENGTH_INDEFINITE)
+            .setAction(R.string.action_retry) {
+                viewModel.setStateEvent(DetailsStateEvent.GetPokemonDetailsEvent)
+            }
+            .show()
 
     }
 
