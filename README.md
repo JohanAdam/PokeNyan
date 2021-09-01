@@ -22,12 +22,13 @@ A pure java module. Its should be the individual and the innermost module. We sh
 </p>
 <br>
 
-### Tech Stack : 
-- Koin.
-- Jetpack Library (Navigation , Data Binding, View Binding, View Model, LiveData & Lifecycle)
-- Coroutines.
-- Retrofit.
-- Glide.
+### Tech Stack & Library: 
+- [Koin](https://insert-koin.io/).
+- [Jetpack Library](https://developer.android.com/jetpack) (Navigation , Paging 3, Data Binding, View Binding, View Model, LiveData & Lifecycle)
+- [Coroutines.](https://developer.android.com/kotlin/coroutines)
+- [Retrofit.](https://square.github.io/retrofit/)
+- [Glide.](https://github.com/bumptech/glide)
+- [Timber.](https://github.com/JakeWharton/timber)
 
 ## Some screenshot!
 ### List page with pagination.
@@ -36,6 +37,12 @@ A pure java module. Its should be the individual and the innermost module. We sh
 ### Details screen.
 <img src="/screenshot/List.png?raw=true" width="240">
 
+Reference :
+- https://medium.com/android-dev-hacks/detailed-guide-on-android-clean-architecture-9eab262a9011
 
+*This project is just a demo. If you have any feedback or question please reach me!
 
-**If you have any question please feel free to email me at : johanadam95@gmail.com**
+**If you have any question please feel free to email me at johanadam95@gmail.com or contact me through Twitter!**
+
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/Johan_Nyan.svg?style=social&label=Follow%20%40Johan_Nyan)](https://twitter.com/Johan_Nyan)
+
