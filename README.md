@@ -1,7 +1,7 @@
 # PokeNyan
 PokeAPi + Kotlin + Clean Architecture + Jetpack Navigation.
 
-My small demonstration for android application based on Clean Architecture and Model-View-ViewModel (MVVM) for me to understand more and hope can help other android developers get head start into Android clean architecture structure.
+My small demonstration for android application based on Clean Architecture and Model-View-ViewModel (MVVM) architecture for me to understand more and hope can help other android developers get head start into Android clean architecture pattern.
 
 For now it only fetch all pokemon list from [PokeAPI](https://pokeapi.co/docs/v2) and display the list using [Android Jetpack Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview), and for the detail page just showing basic info based on the PokeAPI pokemon detail API.
 
