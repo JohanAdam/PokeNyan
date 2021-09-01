@@ -16,8 +16,11 @@ An Android module that contains mappers, Domain Module repository & usecases imp
 #### Domain module 
 A pure java module. Its should be the individual and the innermost module. We should not have any Android package related in this module. Domain module consist of entity models, use cases interface, repository interfaces. 
 
-![image](https://user-images.githubusercontent.com/15909044/131683124-501bb704-8426-458d-b25f-a10e7fa7cdd2.png)
-
+<br>
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/15909044/131683124-501bb704-8426-458d-b25f-a10e7fa7cdd2.png">
+</p>
+<br>
 
 ### Tech Stack : 
 - Koin.
