@@ -19,4 +19,5 @@
     <string name="abilities">Abilities</string>
     <string name="bullet_single">• %1$s</string>
     <string name="moves">Moves</string>
+    <string name="search">Search Pokemon</string>
 </resources>

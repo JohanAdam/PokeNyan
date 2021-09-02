@@ -69,5 +69,18 @@
         <item name="android:windowEnterAnimation">@anim/bounce_in</item>
         <item name="android:windowExitAnimation">@anim/bounce_out</item>
     </style>
+
+
+    <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.TextInputLayout</item>
+<!--        <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>-->
+        <item name="hintTextColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="ThemeOverlay.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorError">@color/red_af4448</item>
+    </style>
 </resources>
 
