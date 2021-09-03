@@ -3,9 +3,8 @@ package com.nyan.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.nyan.data.model.PokemonResponseModel
-import com.nyan.data.paging.PokemonPagingSource
 import com.nyan.data.model.mapToDomain
+import com.nyan.data.paging.PokemonPagingSource
 import com.nyan.data.model.mapToPokemonDetailEntity
 import com.nyan.data.service.NetworkService
 import com.nyan.domain.entity.PokemonDetailEntity
@@ -16,7 +15,6 @@ import com.nyan.domain.repository.RemoteRepository
 import com.nyan.domain.state.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import retrofit2.HttpException
 import timber.log.Timber
 
 class RemoteRepositoryImpl(
@@ -47,6 +45,32 @@ class RemoteRepositoryImpl(
 
             //Return result.
             emit(DataState.Success(pokemon))
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            //Return error.
+            emit(DataState.Failed(ErrorHandler(e)))
+        }
+
+    }
+
+    override fun searchPokemon(searchKey: String): Flow<DataState<List<PokemonEntity>>> = flow {
+        //Return loading.
+        emit(DataState.Loading)
+
+        try {
+
+            val total = networkService.getPokemons("0", "1").count
+
+            val pokemonResponse = networkService.getPokemons("0", total.toString())
+
+            val pokemonsEntity = mapToDomain(pokemonResponse)
+
+            val filteredList = pokemonsEntity.results.filter { item ->
+                item.name!!.contains(searchKey, true)
+            }
+
+            emit(DataState.Success(filteredList))
 
         } catch (e: Exception) {
             e.printStackTrace()

@@ -1,9 +1,15 @@
 package com.nyan.pokenyan.ui.list
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -11,13 +17,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.nyan.domain.entity.PokemonEntity
 import com.nyan.foodie.event.EventObserver
+import com.nyan.pokenyan.R
 import com.nyan.pokenyan.adapter.LoaderStateAdapter
 import com.nyan.pokenyan.adapter.PokemonsAdapter
 import com.nyan.pokenyan.databinding.FragmentPokemonsBinding
 import com.nyan.pokenyan.viewmodel.list.PokemonsViewModel
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -34,6 +43,20 @@ class PokemonsFragment : Fragment() {
         }
     }
 
+    private val listener = object: TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            pokemonAdapter.submitData(lifecycle, PagingData.empty())
+            viewModel.searchPokemon(s.toString())
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+        }
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,9 +71,17 @@ class PokemonsFragment : Fragment() {
         return view
     }
 
-    private fun setupView() {
-//        binding.rv.layoutManager = LinearLayoutManager(context)
+    override fun onResume() {
+        super.onResume()
+        binding.etSearch.addTextChangedListener(listener)
+    }
 
+    override fun onPause() {
+        super.onPause()
+        binding.etSearch.removeTextChangedListener(listener)
+    }
+
+    private fun setupView() {
         //adapter setup.
         val loaderStateAdapter = LoaderStateAdapter {
             pokemonAdapter.retry()
@@ -71,7 +102,7 @@ class PokemonsFragment : Fragment() {
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
-                pokemonAdapter.refresh()
+                viewModel.getPokemons()
             }
         }
 
@@ -93,12 +124,14 @@ class PokemonsFragment : Fragment() {
         })
 
         viewModel.errorMsg.observe(viewLifecycleOwner, EventObserver {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.action_retry)
+                ) {
+                    viewModel.getPokemons()
+                }
+                .show()
+//            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
-
-//        viewModel.listPokemon.observe(viewLifecycleOwner, {
-//            displayData(it)
-//        })
 
         viewModel.listPokemon.observe(viewLifecycleOwner, {
             displayData(it)
