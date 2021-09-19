@@ -22,4 +22,7 @@ interface RemoteRepository {
     }
 
     fun loadPokemonDetails(id: Int): Flow<DataState<PokemonDetailEntity>>
+
+    fun searchPokemon(searchKey: String): Flow<DataState<List<PokemonEntity>>>
+
 }

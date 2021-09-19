@@ -9,7 +9,7 @@ object PresentationModule {
 
     val presentationModule = module {
         viewModel {
-            PokemonsViewModel(get())
+            PokemonsViewModel(get(), get())
         }
         viewModel {
             (id: Int) -> PokemonDetailsViewModel(id, get())
