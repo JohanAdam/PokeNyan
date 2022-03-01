@@ -8,20 +8,24 @@ import com.nyan.domain.entity.PokemonDetailEntity
 import com.nyan.domain.state.DataState
 import com.nyan.domain.usecases.PokemonDetailUseCase
 import com.nyan.foodie.event.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 sealed class DetailsStateEvent {
-    object GetPokemonDetailsEvent : DetailsStateEvent()
+    class GetPokemonDetailsEvent(val id: Int?) : DetailsStateEvent()
 }
 
-class PokemonDetailsViewModel(
-    private val id: Int,
-    private val useCase: PokemonDetailUseCase
-) : ViewModel() {
+@HiltViewModel
+class PokemonDetailsViewModel
+
+@Inject
+constructor(
+    private val useCase: PokemonDetailUseCase) : ViewModel() {
 
     private val _isLoading: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val isLoading: LiveData<Event<Boolean>> get() = _isLoading
@@ -32,19 +36,14 @@ class PokemonDetailsViewModel(
     private val _pokemonDetails: MutableLiveData<PokemonDetailEntity> = MutableLiveData()
     val pokemonDetails: LiveData<PokemonDetailEntity> = _pokemonDetails
 
-    init {
-        Timber.i("init")
-        setStateEvent(DetailsStateEvent.GetPokemonDetailsEvent)
-    }
-
-    fun setStateEvent(event: DetailsStateEvent) {
+    private fun setStateEvent(event: DetailsStateEvent) {
         viewModelScope.launch {
             when (event) {
                 is DetailsStateEvent.GetPokemonDetailsEvent -> {
-                    useCase.execute(id)
+                    useCase.execute(event.id!!)
                         .onEach { dataState ->
                             _isLoading.value = Event(false)
-                            when(dataState) {
+                            when (dataState) {
                                 is DataState.Loading -> {
                                     _isLoading.value = Event(true)
                                 }
@@ -60,6 +59,10 @@ class PokemonDetailsViewModel(
                 }
             }
         }
+    }
+
+    fun getPokemonDetails(id: Int?) {
+        setStateEvent(DetailsStateEvent.GetPokemonDetailsEvent(id))
     }
 
     override fun onCleared() {

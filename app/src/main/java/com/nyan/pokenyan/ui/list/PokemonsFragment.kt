@@ -1,17 +1,14 @@
 package com.nyan.pokenyan.ui.list
 
+import android.os.BaseBundle
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -24,18 +21,18 @@ import com.nyan.pokenyan.R
 import com.nyan.pokenyan.adapter.LoaderStateAdapter
 import com.nyan.pokenyan.adapter.PokemonsAdapter
 import com.nyan.pokenyan.databinding.FragmentPokemonsBinding
+import com.nyan.pokenyan.ui.BaseFragment
 import com.nyan.pokenyan.viewmodel.list.PokemonsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.bind
-import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class PokemonsFragment : Fragment() {
+class PokemonsFragment : BaseFragment() {
 
     private var _binding: FragmentPokemonsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: PokemonsViewModel by viewModel()
+    private val viewModel: PokemonsViewModel by viewModels()
 
     private val pokemonAdapter by lazy {
         PokemonsAdapter { selectedPokemon ->

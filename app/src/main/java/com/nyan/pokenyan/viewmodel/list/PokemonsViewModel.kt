@@ -6,17 +6,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.PagingSource
 import androidx.paging.cachedIn
 import com.nyan.domain.entity.PokemonEntity
 import com.nyan.domain.state.DataState
 import com.nyan.domain.usecases.PokemonListUseCase
 import com.nyan.domain.usecases.PokemonSearchUseCase
 import com.nyan.foodie.event.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 sealed class PokemonsStateEvent {
     object GetPokemonsEvent : PokemonsStateEvent()
@@ -24,7 +28,9 @@ sealed class PokemonsStateEvent {
     object SearchPokemonEvent : PokemonsStateEvent()
 }
 
-class PokemonsViewModel(
+@HiltViewModel
+class PokemonsViewModel
+@Inject constructor(
     private val pokemonListUseCase: PokemonListUseCase,
     private val pokemonSearchUseCase: PokemonSearchUseCase
 ) : ViewModel() {
@@ -75,7 +81,7 @@ class PokemonsViewModel(
                         .execute(searchKey!!)
                         .onEach { dataState ->
                             _isLoading.value = Event(false)
-                            when(dataState) {
+                            when (dataState) {
                                 is DataState.Loading -> {
                                     Timber.i("setStateEvent: Loading")
                                     _isLoading.value = Event(true)
