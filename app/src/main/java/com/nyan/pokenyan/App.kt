@@ -2,14 +2,10 @@ package com.nyan.pokenyan
 
 import android.app.Application
 import android.util.Log
-import com.nyan.data.di.NetworkModule.networkModule
-import com.nyan.data.di.RepositoryModule.repositoryModule
-import com.nyan.domain.di.DomainModule.domainModule
-import com.nyan.pokenyan.di.PresentationModule.presentationModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class App: Application() {
 
     override fun onCreate() {
@@ -22,11 +18,10 @@ class App: Application() {
             Timber.plant(ReleaseTree())
         }
 
-        //Initialized Koin modules.
-        startKoin {
-            androidContext(this@App)
-            modules(presentationModule, networkModule, repositoryModule, domainModule)
-        }
+//        startKoin {
+//            androidContext(this@App)
+//            modules(presentationModule, networkModule, repositoryModule, domainModule)
+//        }
 
     }
 

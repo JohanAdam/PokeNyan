@@ -59,7 +59,6 @@ class RemoteRepositoryImpl(
         emit(DataState.Loading)
 
         try {
-
             val total = networkService.getPokemons("0", "1").count
 
             val pokemonResponse = networkService.getPokemons("0", total.toString())

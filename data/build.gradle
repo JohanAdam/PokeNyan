@@ -51,7 +51,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_logging_version"
 
     //Dependencies Injection.
-    implementation "org.koin:koin-android:$koin_version"
+//    implementation "org.koin:koin-android:$koin_version"
 
     //Gson.
     implementation "com.google.code.gson:gson:$gson_version"

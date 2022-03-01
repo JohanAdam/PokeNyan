@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.nyan.domain.entity.StatsItem
-import com.nyan.domain.entity.Type
-import com.nyan.domain.entity.TypesItem
 import com.nyan.foodie.event.EventObserver
 import com.nyan.pokenyan.Constants
 import com.nyan.pokenyan.R
@@ -20,17 +19,14 @@ import com.nyan.pokenyan.adapter.SingleAdapter
 import com.nyan.pokenyan.adapter.TypeAdapter
 import com.nyan.pokenyan.binding.bindImage
 import com.nyan.pokenyan.databinding.FragmentPokemonDetailsBinding
+import com.nyan.pokenyan.ui.BaseFragment
 import com.nyan.pokenyan.ui.dialog.DialogLoading
 import com.nyan.pokenyan.viewmodel.detail.DetailsStateEvent
 import com.nyan.pokenyan.viewmodel.detail.PokemonDetailsViewModel
-import org.koin.android.ext.android.bind
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import java.util.*
-import kotlin.collections.ArrayList
 
-class PokemonDetailsFragment : Fragment() {
+class PokemonDetailsFragment : BaseFragment() {
 
     companion object {
         const val POKEMON_ID: String = "daId"
@@ -39,9 +35,10 @@ class PokemonDetailsFragment : Fragment() {
     private var _binding: FragmentPokemonDetailsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: PokemonDetailsViewModel by viewModel {
-        parametersOf(arguments?.getInt(POKEMON_ID))
-    }
+    //    private val viewModel: PokemonDetailsViewModel by viewModel {
+//        parametersOf(arguments?.getInt(POKEMON_ID))
+//    }
+    private val viewModel: PokemonDetailsViewModel by viewModels()
 
     private val typeAdapter by lazy {
         TypeAdapter()
@@ -59,7 +56,7 @@ class PokemonDetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPokemonDetailsBinding.inflate(inflater)
         val view = binding.root
 
@@ -70,6 +67,7 @@ class PokemonDetailsFragment : Fragment() {
 
         Timber.i("onCreateView: Name is $name")
 
+        viewModel.getPokemonDetails(arguments?.getInt(POKEMON_ID))
         setupView()
         setupObserver()
 
@@ -166,7 +164,7 @@ class PokemonDetailsFragment : Fragment() {
     private fun showErrorSnackbar(errorMsg: String) {
         Snackbar.make(binding.root, errorMsg, Snackbar.LENGTH_INDEFINITE)
             .setAction(R.string.action_retry) {
-                viewModel.setStateEvent(DetailsStateEvent.GetPokemonDetailsEvent)
+                viewModel.getPokemonDetails(arguments?.getInt(POKEMON_ID))
             }
             .show()
 

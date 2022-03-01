@@ -2,7 +2,7 @@ apply plugin: 'kotlin-kapt'
 
 dependencies {
     //Hilt.
-    implementation "org.koin:koin-core:$koin_version"
+//    implementation "org.koin:koin-core:$koin_version"
 
     //Retrofit.
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"

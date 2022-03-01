@@ -1,19 +1,20 @@
 package com.nyan.pokenyan.di
 
-import com.nyan.pokenyan.viewmodel.detail.PokemonDetailsViewModel
-import com.nyan.pokenyan.viewmodel.list.PokemonsViewModel
-import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.dsl.module
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
+//@Module
+//@InstallIn(SingletonComponent::class)
 object PresentationModule {
 
-    val presentationModule = module {
-        viewModel {
-            PokemonsViewModel(get(), get())
-        }
-        viewModel {
-            (id: Int) -> PokemonDetailsViewModel(id, get())
-        }
-    }
+//    val presentationModule = module {
+//        viewModel {
+//            PokemonsViewModel(get(), get())
+//        }
+//        viewModel {
+//            (id: Int) -> PokemonDetailsViewModel(id, get())
+//        }
+//    }
 
 }
