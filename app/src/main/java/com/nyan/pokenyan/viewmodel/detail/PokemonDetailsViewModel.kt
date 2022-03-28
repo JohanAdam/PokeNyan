@@ -10,6 +10,7 @@ import com.nyan.domain.usecases.PokemonDetailUseCase
 import com.nyan.foodie.event.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -41,7 +42,7 @@ constructor(
             when (event) {
                 is DetailsStateEvent.GetPokemonDetailsEvent -> {
                     useCase.execute(event.id!!)
-                        .onEach { dataState ->
+                        .collect { dataState ->
                             _isLoading.value = Event(false)
                             when (dataState) {
                                 is DataState.Loading -> {
@@ -55,7 +56,7 @@ constructor(
                                 }
                             }
                         }
-                        .launchIn(viewModelScope)
+//                        .launchIn(viewModelScope)
                 }
             }
         }

@@ -21,7 +21,7 @@ interface RemoteRepository {
         return PagingConfig(pageSize = 25, enablePlaceholders = false)
     }
 
-    fun loadPokemonDetails(id: Int): Flow<DataState<PokemonDetailEntity>>
+    suspend fun loadPokemonDetails(id: Int): Flow<DataState<PokemonDetailEntity>>
 
     fun searchPokemon(searchKey: String): Flow<DataState<List<PokemonEntity>>>
 

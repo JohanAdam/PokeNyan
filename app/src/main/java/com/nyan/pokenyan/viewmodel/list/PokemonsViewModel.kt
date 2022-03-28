@@ -13,6 +13,7 @@ import com.nyan.domain.usecases.PokemonListUseCase
 import com.nyan.domain.usecases.PokemonSearchUseCase
 import com.nyan.foodie.event.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -25,7 +26,7 @@ import javax.inject.Inject
 sealed class PokemonsStateEvent {
     object GetPokemonsEvent : PokemonsStateEvent()
     object OpenPokemonDetailEvent : PokemonsStateEvent()
-    object SearchPokemonEvent : PokemonsStateEvent()
+    class SearchPokemonEvent(val searchKey: String?) : PokemonsStateEvent()
 }
 
 @HiltViewModel
@@ -47,7 +48,6 @@ class PokemonsViewModel
     private val _navigateToDetails: MutableLiveData<Event<PokemonEntity>> = MutableLiveData()
     val navigateToDetails: LiveData<Event<PokemonEntity>> get() = _navigateToDetails
 
-    private var searchKey: String? = null
     private var selectedPokemon: PokemonEntity? = null
 
     init {
@@ -60,16 +60,11 @@ class PokemonsViewModel
 
     private fun setStateEvent(event: PokemonsStateEvent) {
         viewModelScope.launch {
+            Timber.i("setStateEvent: scope is $coroutineContext")
+            Timber.i("setStateEvent: scope is $this")
             when (event) {
                 is PokemonsStateEvent.GetPokemonsEvent -> {
-                    Timber.e("setStateEvent: Get Pokemon")
-                    pokemonListUseCase
-                        .execute()
-                        .cachedIn(viewModelScope)
-                        .distinctUntilChanged()
-                        .collectLatest {
-                            _listPokemon.value = it
-                        }
+                    getPokemonListEvent()
                 }
                 is PokemonsStateEvent.OpenPokemonDetailEvent -> {
                     Timber.i("setStateEvent: Open Pokemon Details")
@@ -77,36 +72,51 @@ class PokemonsViewModel
                 }
                 is PokemonsStateEvent.SearchPokemonEvent -> {
                     Timber.i("setStateEvent: Search Pokemon Event")
-                    pokemonSearchUseCase
-                        .execute(searchKey!!)
-                        .onEach { dataState ->
-                            _isLoading.value = Event(false)
-                            when (dataState) {
-                                is DataState.Loading -> {
-                                    Timber.i("setStateEvent: Loading")
-                                    _isLoading.value = Event(true)
-                                }
-                                is DataState.Success -> {
-                                    Timber.i("setStateEvent: Success")
-                                    Timber.i("setStateEvent: ${dataState.data.size}")
-                                    _listPokemon.value = PagingData.from(dataState.data)
-                                }
-                                is DataState.Failed -> {
-                                    Timber.i("setStateEvent: Failed")
-                                    _errorMsg.value = Event(dataState.error.errorMsg)
-                                }
-                                else -> _isLoading.value = Event(false)
-                            }
-                        }.launchIn(viewModelScope)
+                    searchPokemonEvent(event.searchKey)
                 }
             }
         }
     }
 
+    private suspend fun getPokemonListEvent() {
+        Timber.e("setStateEvent: Get Pokemon")
+        pokemonListUseCase
+            .execute()
+            .cachedIn(viewModelScope)
+            .distinctUntilChanged()
+            .collectLatest {
+                _listPokemon.postValue(it)
+            }
+    }
+
+    private fun searchPokemonEvent(searchKey: String?) {
+        if (searchKey != null) {
+            pokemonSearchUseCase.execute(searchKey)
+                .onEach { dataState ->
+                    _isLoading.value = Event(false)
+                    when (dataState) {
+                        is DataState.Loading -> {
+                            Timber.i("setStateEvent: Loading")
+                            _isLoading.value = Event(true)
+                        }
+                        is DataState.Success -> {
+                            Timber.i("setStateEvent: Success")
+                            Timber.i("setStateEvent: ${dataState.data.size}")
+                            _listPokemon.value = PagingData.from(dataState.data)
+                        }
+                        is DataState.Failed -> {
+                            Timber.i("setStateEvent: Failed")
+                            _errorMsg.value = Event(dataState.error.errorMsg)
+                        }
+                        else -> _isLoading.value = Event(false)
+                    }
+                }.launchIn(viewModelScope)
+        }
+    }
+
     fun searchPokemon(searchKey: String) {
-        this.searchKey = searchKey
         if (!TextUtils.isEmpty(searchKey)) {
-            setStateEvent(PokemonsStateEvent.SearchPokemonEvent)
+            setStateEvent(PokemonsStateEvent.SearchPokemonEvent(searchKey))
         } else {
             setStateEvent(PokemonsStateEvent.GetPokemonsEvent)
         }

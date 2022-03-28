@@ -86,19 +86,19 @@ class PokemonDetailsFragment : BaseFragment() {
         binding.rvMoves.adapter = movesAdapter
     }
 
-    private lateinit var dialogLoading: DialogFragment
+    private var dialogLoading: DialogFragment? = null
     private fun setupObserver() {
 
         viewModel.isLoading.observe(viewLifecycleOwner, EventObserver {
             Timber.i("setupObserver: loading $it")
             if (it) {
                 dialogLoading = DialogLoading.newInstance()
-                dialogLoading.show(
+                dialogLoading?.show(
                     requireActivity().supportFragmentManager,
                     DialogLoading::class.java.simpleName
                 )
             } else {
-                dialogLoading.dismiss()
+                dialogLoading?.dismiss()
             }
         })
 

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 class PokemonDetailUseCase(private val remoteRepository: RemoteRepository) {
 
-    fun execute(id: Int): Flow<DataState<PokemonDetailEntity>> {
+    suspend fun execute(id: Int): Flow<DataState<PokemonDetailEntity>> {
         return remoteRepository.loadPokemonDetails(id)
     }
 

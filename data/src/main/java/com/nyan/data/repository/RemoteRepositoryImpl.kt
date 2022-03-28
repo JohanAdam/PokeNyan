@@ -13,8 +13,10 @@ import com.nyan.domain.entity.PokemonsEntity
 import com.nyan.domain.network.ErrorHandler
 import com.nyan.domain.repository.RemoteRepository
 import com.nyan.domain.state.DataState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
 
 class RemoteRepositoryImpl(
@@ -31,7 +33,7 @@ class RemoteRepositoryImpl(
         ).flow
     }
 
-    override fun loadPokemonDetails(id: Int): Flow<DataState<PokemonDetailEntity>> = flow {
+    override suspend fun loadPokemonDetails(id: Int): Flow<DataState<PokemonDetailEntity>> = flow {
         //Return Loading.
         emit(DataState.Loading)
 
@@ -52,7 +54,7 @@ class RemoteRepositoryImpl(
             emit(DataState.Failed(ErrorHandler(e)))
         }
 
-    }
+    }.flowOn(Dispatchers.IO)
 
     override fun searchPokemon(searchKey: String): Flow<DataState<List<PokemonEntity>>> = flow {
         //Return loading.

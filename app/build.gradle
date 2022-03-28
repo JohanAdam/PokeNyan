@@ -84,10 +84,19 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
+    /** -------------------- Testing Libs ---------------------**/
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_test_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$expresso_core_version"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:5.7.0"
+    testImplementation "io.mockk:mockk:1.10.5"
+    androidTestImplementation "org.assertj:assertj-core:3.19.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2-native-mt"
+    implementation "androidx.arch.core:core-testing:2.1.0"
+    /** -------------------------------------------------------**/
 }
+
 kapt {
     correctErrorTypes true
 }
