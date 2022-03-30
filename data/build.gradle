@@ -61,8 +61,15 @@ dependencies {
     //optional dependency for RxJava support
     implementation "androidx.paging:paging-rxjava2-ktx:$paging_version"
 
+    //Hilt
+    implementation 'com.google.dagger:hilt-android:2.40.5'
+    implementation 'androidx.test:core-ktx:1.4.0'
+    kapt 'com.google.dagger:hilt-compiler:2.40.5'
+
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_test_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$expresso_core_version"
 
+    //Testing
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.3")
 }
