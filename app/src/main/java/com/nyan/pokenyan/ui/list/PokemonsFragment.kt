@@ -1,13 +1,11 @@
 package com.nyan.pokenyan.ui.list
 
-import android.os.BaseBundle
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,14 +14,13 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.nyan.domain.entity.PokemonEntity
-import com.nyan.foodie.event.EventObserver
+import com.nyan.pokenyan.event.EventObserver
 import com.nyan.pokenyan.R
 import com.nyan.pokenyan.adapter.LoaderStateAdapter
 import com.nyan.pokenyan.adapter.PokemonsAdapter
 import com.nyan.pokenyan.databinding.FragmentPokemonsBinding
 import com.nyan.pokenyan.ui.BaseFragment
 import com.nyan.pokenyan.viewmodel.list.PokemonsViewModel
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 

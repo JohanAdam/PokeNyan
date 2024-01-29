@@ -5,6 +5,8 @@ plugins {
 }
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.dagger.hilt.android'
 
 
 android {
@@ -63,8 +65,8 @@ dependencies {
 //    implementation "org.koin:koin-core:$koin_version"
 //    implementation "org.koin:koin-android:$koin_version"
 //    implementation "org.koin:koin-android-viewmodel:$koin_version"
-    implementation 'com.google.dagger:hilt-android:2.40.5'
-    kapt 'com.google.dagger:hilt-compiler:2.40.5'
+    implementation 'com.google.dagger:hilt-android:2.50'
+    kapt 'com.google.dagger:hilt-compiler:2.50'
 
     //Logging Interceptor.
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_logging_version"

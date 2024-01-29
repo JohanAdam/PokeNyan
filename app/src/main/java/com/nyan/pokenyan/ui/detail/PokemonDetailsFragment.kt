@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.nyan.domain.entity.StatsItem
-import com.nyan.foodie.event.EventObserver
+import com.nyan.pokenyan.event.EventObserver
 import com.nyan.pokenyan.Constants
 import com.nyan.pokenyan.R
 import com.nyan.pokenyan.adapter.SingleAdapter
@@ -21,9 +20,7 @@ import com.nyan.pokenyan.binding.bindImage
 import com.nyan.pokenyan.databinding.FragmentPokemonDetailsBinding
 import com.nyan.pokenyan.ui.BaseFragment
 import com.nyan.pokenyan.ui.dialog.DialogLoading
-import com.nyan.pokenyan.viewmodel.detail.DetailsStateEvent
 import com.nyan.pokenyan.viewmodel.detail.PokemonDetailsViewModel
-import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 class PokemonDetailsFragment : BaseFragment() {
