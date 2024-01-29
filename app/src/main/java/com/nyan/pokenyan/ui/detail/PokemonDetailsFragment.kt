@@ -104,57 +104,57 @@ class PokemonDetailsFragment : BaseFragment() {
             showErrorSnackbar(it)
         })
 
-        viewModel.pokemonDetails.observe(viewLifecycleOwner, Observer {
-            Timber.e("setupObserver: YAYY")
+        viewModel.pokemonDetails.observe(viewLifecycleOwner) { data ->
+            data?.let {
+                bindImage(binding.ivSprite, it.sprites?.frontDefault)
 
-            bindImage(binding.ivSprite, it.sprites?.frontDefault)
+                typeAdapter.submitList(it.types)
 
-            typeAdapter.submitList(it.types)
+                val weightInKg = it.weight?.times(0.1)
+                val heightInCm = it.height?.times(10)
 
-            val weightInKg = it.weight?.times(0.1)
-            val heightInCm = it.height?.times(10)
+                binding.tvWeight.text =
+                    getString(R.string.kg, String.format("%.1f", weightInKg))//Hectorgrams > Kg
+                binding.tvHeight.text = getString(R.string.cm, heightInCm.toString()) //Decimeters > Cm
 
-            binding.tvWeight.text =
-                getString(R.string.kg, String.format("%.1f", weightInKg))//Hectorgrams > Kg
-            binding.tvHeight.text = getString(R.string.cm, heightInCm.toString()) //Decimeters > Cm
+                //Stats.
+                it.stats?.let { statsList ->
+                    val hp = getStats(Constants.hp, statsList)
+                    binding.tvHp.text = getString(R.string.hp, hp.toString())
+                    binding.pbHp.max = Constants.maxStats
+                    binding.pbHp.progress = hp
 
-            //Stats.
-            it.stats?.let { statsList ->
-                val hp = getStats(Constants.hp, statsList)
-                binding.tvHp.text = getString(R.string.hp, hp.toString())
-                binding.pbHp.max = Constants.maxStats
-                binding.pbHp.progress = hp
+                    val atk = getStats(Constants.attack, statsList)
+                    binding.tvAtk.text = getString(R.string.attack, atk.toString())
+                    binding.pbAtk.max = Constants.maxStats
+                    binding.pbAtk.progress = atk
 
-                val atk = getStats(Constants.attack, statsList)
-                binding.tvAtk.text = getString(R.string.attack, atk.toString())
-                binding.pbAtk.max = Constants.maxStats
-                binding.pbAtk.progress = atk
+                    val def = getStats(Constants.defense, statsList)
+                    binding.tvDef.text = getString(R.string.defense, def.toString())
+                    binding.pbDef.max = Constants.maxStats
+                    binding.pbDef.progress = def
 
-                val def = getStats(Constants.defense, statsList)
-                binding.tvDef.text = getString(R.string.defense, def.toString())
-                binding.pbDef.max = Constants.maxStats
-                binding.pbDef.progress = def
+                    val sAtk = getStats(Constants.special_attack, statsList)
+                    binding.tvSAtk.text = getString(R.string.s_attack, sAtk.toString())
+                    binding.pbSAtk.max = Constants.maxStats
+                    binding.pbSAtk.progress = sAtk
 
-                val sAtk = getStats(Constants.special_attack, statsList)
-                binding.tvSAtk.text = getString(R.string.s_attack, sAtk.toString())
-                binding.pbSAtk.max = Constants.maxStats
-                binding.pbSAtk.progress = sAtk
+                    val sDef = getStats(Constants.special_defense, statsList)
+                    binding.tvSDef.text = getString(R.string.s_defend, sDef.toString())
+                    binding.pbSDef.max = Constants.maxStats
+                    binding.pbSDef.progress = sDef
 
-                val sDef = getStats(Constants.special_defense, statsList)
-                binding.tvSDef.text = getString(R.string.s_defend, sDef.toString())
-                binding.pbSDef.max = Constants.maxStats
-                binding.pbSDef.progress = sDef
+                    val spd = getStats(Constants.speed, statsList)
+                    binding.tvSpd.text = getString(R.string.speed, spd.toString())
+                    binding.pbSpd.max = Constants.maxStats
+                    binding.pbSpd.progress = spd
+                }
 
-                val spd = getStats(Constants.speed, statsList)
-                binding.tvSpd.text = getString(R.string.speed, spd.toString())
-                binding.pbSpd.max = Constants.maxStats
-                binding.pbSpd.progress = spd
+                abilitiesAdapter.submitList(it.abilities)
+
+                movesAdapter.submitList(it.moves)
             }
-
-            abilitiesAdapter.submitList(it.abilities)
-
-            movesAdapter.submitList(it.moves)
-        })
+        }
 
     }
 

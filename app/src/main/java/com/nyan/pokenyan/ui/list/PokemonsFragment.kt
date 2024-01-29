@@ -127,9 +127,9 @@ class PokemonsFragment : BaseFragment() {
 //            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
-        viewModel.listPokemon.observe(viewLifecycleOwner, {
+        viewModel.listPokemon.observe(viewLifecycleOwner) {
             displayData(it)
-        })
+        }
 
         viewModel.navigateToDetails.observe(viewLifecycleOwner, EventObserver {
             this.findNavController().navigate(PokemonsFragmentDirections.actionShowDetail(it.id, it.name!!))

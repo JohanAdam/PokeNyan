@@ -33,8 +33,8 @@ constructor(
     private val _errorMsg: MutableLiveData<Event<String>> = MutableLiveData()
     val errorMsg: LiveData<Event<String>> get() = _errorMsg
 
-    private val _pokemonDetails: MutableLiveData<PokemonDetailEntity> = MutableLiveData()
-    val pokemonDetails: LiveData<PokemonDetailEntity> = _pokemonDetails
+    private val _pokemonDetails: MutableLiveData<PokemonDetailEntity?> = MutableLiveData()
+    val pokemonDetails: LiveData<PokemonDetailEntity?> = _pokemonDetails
 
     private fun setStateEvent(event: DetailsStateEvent) {
         viewModelScope.launch {
